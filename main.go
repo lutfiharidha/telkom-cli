@@ -60,7 +60,8 @@ func txt(file string, dir string) {
 	}
 
 	if dir == "" {
-		dir, file = filepath.Split(file)
+		dir = ""
+		file = strings.TrimSuffix(filepath.Base(file), path.Ext(filepath.Base(file)))
 	} else {
 		file = strings.TrimSuffix(filepath.Base(dir), path.Ext(filepath.Base(dir)))
 		dir, _ = filepath.Split(dir)
@@ -90,12 +91,12 @@ func jsonExt(file string, dir string) {
 	jsonString, _ := json.Marshal(datas)
 
 	if dir == "" {
-		dir, _ = filepath.Split(file)
+		dir = ""
 		file = strings.TrimSuffix(filepath.Base(file), path.Ext(filepath.Base(file)))
-
 	} else {
 		file = strings.TrimSuffix(filepath.Base(dir), path.Ext(filepath.Base(dir)))
 		dir, _ = filepath.Split(dir)
+		fmt.Println(file)
 	}
 	if err := ioutil.WriteFile(dir+file+".json", jsonString, os.ModePerm); err != nil {
 		fmt.Println(err)
