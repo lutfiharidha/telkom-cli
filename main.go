@@ -31,16 +31,15 @@ func main() {
 	}
 	if len(args) == 0 {
 		fmt.Println("usage: <file.log> -t <type> -o <output file>")
+		fmt.Println("-o string\n \t Writes output to the file specified")
+		fmt.Println("-t string\n \t Type output txt|json (default \"txt\")")
+		fmt.Println("-h string\n \t Help")
 		os.Exit(0)
 	}
-
 	os.Args = notargs
 	flag.StringVar(&types, "t", "txt", "Type output")
 	flag.StringVar(&outputs, "o", "", "Writes output to the file specified")
-	flag.BoolVar(&help, "u", false, "Help")
-	if help {
-		os.Exit(0)
-	}
+	flag.BoolVar(&help, "h", false, "Help")
 	flag.Parse()
 	switch types {
 	case "txt":
@@ -48,6 +47,7 @@ func main() {
 	case "json":
 		jsonExt(args[0], outputs)
 	default:
+		fmt.Println("unknown type file " + types)
 		os.Exit(0)
 	}
 }
@@ -96,7 +96,6 @@ func jsonExt(file string, dir string) {
 	} else {
 		file = strings.TrimSuffix(filepath.Base(dir), path.Ext(filepath.Base(dir)))
 		dir, _ = filepath.Split(dir)
-		fmt.Println(file)
 	}
 	if err := ioutil.WriteFile(dir+file+".json", jsonString, os.ModePerm); err != nil {
 		fmt.Println(err)
